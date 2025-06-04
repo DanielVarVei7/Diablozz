@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <div class="contenidoBuscar">
+        <form action="/buscar" method="get">
+            <input type="text" name="txtbuscar">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+
+    <div class="top-bar">
+        <h1>{{ mensaje }}</h1>
+        <a href="{{ url_for('logout') }}" class="logout">Cerrar sesión</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% if clientes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente[0] }}</td>
+                        <td>{{ cliente[1] }}</td>
+                        <td>{{ cliente[2] }}</td>
+                        <td>
+                            <a href="{{ url_for('actualizar', id=cliente[0]) }}">Editar</a> |
+                            <a href="{{ url_for('eliminar', id=cliente[0]) }}">Eliminar</a> |
+                            <a href="{{ url_for('comprar', id=cliente[0]) }}">Comprar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay clientes registrados.</p>
+    {% endif %}
+
+    <div class="formulario">
+        <form action="{{ url_for('insertar') }}" method="POST">
+            <label for="txtnombre">Nombre:</label>
+            <input type="text" name="txtnombre" required>
+
+            <label for="txtnit">NIT:</label>
+            <input type="text" name="txtnit" required>
+
+            <input type="submit" value="Agregar Cliente">
+        </form>
+    </div>
+</body>
+</html>

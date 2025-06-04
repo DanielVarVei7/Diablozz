@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Álbumes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <h1>Catálogo de Álbumes</h1>
+    <p>Cliente ID: {{ id_cliente }}</p>
+    <a href="/">Volver al registro</a>
+
+    <h2>Álbumes Disponibles</h2>
+    <ul>
+        {% for album in catalogo %}
+        <li>
+            <strong>{{ album['nombre'] }}</strong> - {{ album['artista'] }} - ${{ album['precio'] }}
+            <form action="{{ url_for('agregar_carrito') }}" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="{{ album['id'] }}">
+                <button type="submit">Agregar</button>
+            </form>
+            <form action="{{ url_for('quitar_carrito') }}" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="{{ album['id'] }}">
+                <button type="submit">Quitar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Carrito</h2>
+    {% if carrito %}
+        <ul>
+            {% for item in carrito %}
+                <li>{{ item['nombre'] }} - {{ item['artista'] }} - ${{ item['precio'] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>El carrito está vacío.</p>
+    {% endif %}
+</body>
+</html>
