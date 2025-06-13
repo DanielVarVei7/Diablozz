@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout {
+            color: white;
+            background-color: #e74c3c;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .logout:hover {
+            background-color: #c0392b;
+        }
+
+        .contenidoBuscar {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
+
+        .btn-toggle {
+            font-size: 24px;
+            padding: 5px 10px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        #formularioUsuario {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"], input[type="submit"] {
+            padding: 8px;
+            margin-top: 5px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <h1>{{ mensaje }}</h1>
+        <a href="{{ url_for('logout') }}" class="logout">Cerrar sesión</a>
+    </div>
+
+    <div class="contenidoBuscar">
+        <form action="/buscar" method="get">
+            <input type="text" name="txtbuscar" placeholder="Buscar cliente...">
+            <input type="submit" value="Buscar">
+        </form>
+    </div>
+
+    <a href="/usuarios" >➕ Añadir Usuario</a>
+
+    <div id="formularioUsuario">
+        <form action="{{ url_for('insertar') }}" method="POST">
+            <label for="txtnombre">Nombre:</label>
+            <input type="text" name="txtnombre" placeholder="Nombre completo" required>
+
+            <label for="txtnit">NIT:</label>
+            <input type="text" name="txtnit" placeholder="Número de NIT" required>
+
+            <input type="submit" value="Agregar Cliente">
+        </form>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% if clientes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente[0] }}</td>
+                        <td>{{ cliente[1] }}</td>
+                        <td>{{ cliente[2] }}</td>
+                        <td>
+                            <a href="{{ url_for('actualizar', id=cliente[0]) }}">Editar</a> |
+                            <a href="{{ url_for('eliminar', id=cliente[0]) }}">Eliminar</a> |
+                            <a href="{{ url_for('comprar', id=cliente[0]) }}">Comprar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay clientes registrados.</p>
+    {% endif %}
+
+    <script>
+        function toggleFormulario() {
+            const form = document.getElementById('formularioUsuario');
+            form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>

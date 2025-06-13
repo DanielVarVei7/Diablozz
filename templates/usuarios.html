@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+
+    <h1>Gestión de Usuarios</h1>
+
+    <div id="formularioUsuario">
+        <form action="" method="POST">
+
+            <label for="txtusuario">Usuario:</label>
+            <input type="text" name="txtusuario" placeholder="Nombre de usuario" required>
+
+            <label for="txtclave">Clave:</label>
+            <input type="password" name="txtclave" placeholder="Contraseña" required>
+
+            <label for="txtrol">Rol:</label>
+            <select name="txtrol" required>
+                <option value="">Seleccione un rol</option>
+                <option value="cantante">Cantante</option>
+                <option value="productor">Productor</option>
+                <option value="comprador">Comprador</option>
+                <option value="administrador">Administrador</option>
+            </select>
+
+            <input type="submit" value="Agregar Usuario">
+        </form>
+    </div>
+
+</body>
+</html>
